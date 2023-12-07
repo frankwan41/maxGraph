@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { Graph, styleUtils } from '@maxgraph/core';
+import { Graph, styleUtils, GoalModelLayout,CompactTreeLayout, Perimeter } from '@maxgraph/core';
 import { globalTypes, globalValues } from './shared/args.js';
 
 export default {
@@ -37,59 +37,87 @@ const Template = ({ label, ...args }) => {
   container.style.background = 'url(/images/grid.gif)';
   container.style.cursor = 'default';
 
-  class MyCustomGraph extends Graph {
-    fireMouseEvent(evtName, me, sender) {
-      // Overrides the mouse event dispatching mechanism to update the
-      // cell which is associated with the event in case the native hit
-      // detection did not return anything.
+  // class MyCustomGraph extends Graph {
+    // fireMouseEvent(evtName, me, sender) {
+    //   // Overrides the mouse event dispatching mechanism to update the
+    //   // cell which is associated with the event in case the native hit
+    //   // detection did not return anything.
 
-      // Checks if native hit detection did not return anything
-      if (me.getState() == null) {
-        // Updates the graph coordinates in the event since we need
-        // them here. Storing them in the event means the overridden
-        // method doesn't have to do this again.
-        if (me.graphX == null || me.graphY == null) {
-          const pt = styleUtils.convertPoint(container, me.getX(), me.getY());
+    //   // Checks if native hit detection did not return anything
+    //   if (me.getState() == null) {
+    //     // Updates the graph coordinates in the event since we need
+    //     // them here. Storing them in the event means the overridden
+    //     // method doesn't have to do this again.
+    //     if (me.graphX == null || me.graphY == null) {
+    //       const pt = styleUtils.convertPoint(container, me.getX(), me.getY());
 
-          me.graphX = pt.x;
-          me.graphY = pt.y;
-        }
+    //       me.graphX = pt.x;
+    //       me.graphY = pt.y;
+    //     }
 
-        const cell = this.getCellAt(me.graphX, me.graphY);
+    //     const cell = this.getCellAt(me.graphX, me.graphY);
 
-        if (cell?.isEdge()) {
-          me.state = this.view.getState(cell);
+    //     if (cell?.isEdge()) {
+    //       me.state = this.view.getState(cell);
 
-          if (me.state != null && me.state.shape != null) {
-            this.container.style.cursor = me.state.shape.node.style.cursor;
-          }
-        }
-      }
+    //       if (me.state != null && me.state.shape != null) {
+    //         this.container.style.cursor = me.state.shape.node.style.cursor;
+    //       }
+    //     }
+    //   }
 
-      if (me.state == null) {
-        this.container.style.cursor = 'default';
-      }
+    //   if (me.state == null) {
+    //     this.container.style.cursor = 'default';
+    //   }
 
-      super.fireMouseEvent(evtName, me, sender);
-    }
+    //   super.fireMouseEvent(evtName, me, sender);
+    // }
 
-    dblClick(evt, cell) {
-      // Overrides double click handling to use the tolerance
-      if (cell == null) {
-        const pt = styleUtils.convertPoint(
-          el,
-          eventUtils.getClientX(evt),
-          eventUtils.getClientY(evt)
-        );
-        cell = this.getCellAt(pt.x, pt.y);
-      }
-      super.dblClick(evt, cell);
-    }
-  }
+    // dblClick(evt, cell) {
+    //   // Overrides double click handling to use the tolerance
+    //   if (cell == null) {
+    //     const pt = styleUtils.convertPoint(
+    //       el,
+    //       eventUtils.getClientX(evt),
+    //       eventUtils.getClientY(evt)
+    //     );
+    //     cell = this.getCellAt(pt.x, pt.y);
+    //   }
+    //   super.dblClick(evt, cell);
+    // }
+  // }
 
   // Creates the graph inside the given container
-  const graph = new MyCustomGraph(container);
-  graph.setEventTolerance(20);
+  const graph = new Graph(container);
+  // graph.setEventTolerance(20);
+
+  // const layout = new GoalModelLayout();
+
+  graph.setConnectable(true);
+  graph.setCellsEditable(true);
+
+  const edgeStyle = graph.getStylesheet().getDefaultEdgeStyle();
+  edgeStyle["strokeColor"] = "black";
+  edgeStyle["fontColor"] = "black";
+  edgeStyle["endArrow"] = "none";
+  edgeStyle["strokeWidth"] = 2;
+  edgeStyle['dashPattern'] = 2
+  // edgeStyle['edgeStyle'] = 'customMMEdgeStyle';
+  // edgeStyle['perimeter'] = Perimeter.RectanglePerimeter
+  // edgeStyle['noEdgeStyle'] = true
+  // edgeStyle['bendable'] = true
+
+
+  const nodeStyle = graph.getStylesheet().getDefaultVertexStyle();
+  nodeStyle["fillColor"] = "#ffffff";
+  nodeStyle["strokeColor"] = "#000000";
+  nodeStyle["strokeWidth"] = 2
+  // nodeStyle["autoSize"] = true;
+  // nodeStyle["spacing"] = 10;
+  // nodeStyle["spacingLeft"] = 10;
+  // nodeStyle["spacingRight"] = 10;
+  nodeStyle['editable'] = true;
+
 
   // Gets the default parent for inserting new cells. This
   // is normally the first child of the root (ie. layer 0).
@@ -114,17 +142,18 @@ const Template = ({ label, ...args }) => {
       source: v1,
       target: v2,
       style: {
-        edgeStyle: 'orthogonalEdgeStyle',
+        // edgeStyle: 'customMMEdgeStyle',
+        // edgeStyle: 'segmentEdgeStyle',
       },
     });
-    const e2 = graph.insertEdge({
-      parent,
-      source: v2,
-      target: v1,
-      style: {
-        edgeStyle: 'orthogonalEdgeStyle',
-      },
-    });
+    // const e2 = graph.insertEdge({
+    //   parent,
+    //   source: v2,
+    //   target: v1,
+    //   style: {
+    //     edgeStyle: 'orthogonalEdgeStyle',
+    //   },
+    // });
   });
 
   return container;

@@ -16,6 +16,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Frank Modification
+
 import { getValue } from '../../util/Utils';
 import { getNumber } from '../../util/StringUtils';
 import {
@@ -36,6 +38,7 @@ import {
 } from '../../util/Constants';
 import Rectangle from '../geometry/Rectangle';
 import Geometry from '../geometry/Geometry';
+import { mathUtils } from '../..';
 
 /**
  * Provides various edge styles to be used as the values for
@@ -510,6 +513,57 @@ class EdgeStyle {
       }
     }
   }
+
+  /**
+   * Frank Modification
+   * Implements a default edge with line connected to the perimeter. 
+   * @param state <CellState> that represents the edge to be updated.
+   * @param sourceScaled <CellState> that represents the source terminal.
+   * @param targetScaled <CellState> that represents the target terminal.
+   * @param controlHints List of relative control points.
+   * @param result Array of <Point> that represent the actual points of the
+   */
+  static CustomMMConnector(
+    state: CellState,
+    sourceScaled: CellState,
+    targetScaled: CellState,
+    controlHints: Point[],
+    result: Point[]
+    ){
+
+      console.log(sourceScaled, targetScaled)
+
+      const source = EdgeStyle.scaleCellState(sourceScaled, state.view.scale);
+      const target = EdgeStyle.scaleCellState(targetScaled, state.view.scale);
+
+      const pushPoint = (pt: Point) => {
+        pt.x = Math.round(pt.x * 10) / 10;
+        pt.y = Math.round(pt.y * 10) / 10;
+        result.push(new Point(pt.x, pt.y));
+      };
+  
+      let nextPoint, perimeterPoint;
+  
+      // Check if the source cell is a valid vertex
+      if (source) {
+        nextPoint = target ? 
+          new Point(state.view.getRoutingCenterX(target), state.view.getRoutingCenterY(target)) : null; 
+          if (nextPoint) {
+            perimeterPoint = state.view.getPerimeterPoint(source, nextPoint, false);
+            pushPoint(perimeterPoint);
+          }
+      }
+
+      // Check if the target cell is a valid vertedx
+      if (target) {
+        nextPoint = source ? 
+          new Point(state.view.getRoutingCenterX(source), state.view.getRoutingCenterY(source)) : null; 
+          if (nextPoint) {
+            perimeterPoint = state.view.getPerimeterPoint(target, nextPoint, false);
+            pushPoint(perimeterPoint);
+          }
+      } 
+    }
 
   /**
    * Implements an orthogonal edge style. Use {@link EdgeSegmentHandler}

@@ -587,6 +587,7 @@ export const enum ELBOW {
   HORIZONTAL = 'horizontal',
 }
 
+// Frank Modification
 /**
  * Can be used as a string value for the STYLE_EDGE style.
  */
@@ -599,6 +600,7 @@ export const enum EDGESTYLE {
   ORTHOGONAL = 'orthogonalEdgeStyle',
   SEGMENT = 'segmentEdgeStyle',
   MANHATTAN = 'manhattanEdgeStyle',
+  CUSTOM_MM = 'customMMEdgeStyle',
 }
 
 /**
