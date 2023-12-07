@@ -315,8 +315,9 @@ class CellEditorHandler implements GraphPlugin {
     if (Client.IS_GC) {
       this.textarea.style.minHeight = '1em';
     }
-
-    this.textarea.style.position = 'relative';
+    // Frank Modification
+    this.textarea.style.position = 'absolute';
+    // this.textarea.style.position = 'relative';
     this.installListeners(this.textarea);
   }
 
@@ -397,7 +398,8 @@ class CellEditorHandler implements GraphPlugin {
         if (this.isStopEditingEvent(evt)) {
           this.graph.stopEditing(false);
           InternalEvent.consume(evt);
-        } else if (evt.keyCode === 27 /* Escape */) {
+          //Frank Modification
+        } else if (evt.key === 'Escape' /* Escape */) {
           this.graph.stopEditing(this.isCancelEditingKeyEvent(evt));
           InternalEvent.consume(evt);
         }
@@ -413,7 +415,8 @@ class CellEditorHandler implements GraphPlugin {
           this.clearOnChange &&
           elt.innerHTML === this.getEmptyLabelText() &&
           (!Client.IS_FF ||
-            (evt.keyCode !== 8 /* Backspace */ && evt.keyCode !== 46)) /* Delete */
+            // Frank Modification
+            (evt.key !== 'Backspace' /* Backspace */ && evt.key !== 'Delete')) /* Delete */
         ) {
           this.clearOnChange = false;
           elt.innerHTML = '';
@@ -752,6 +755,10 @@ class CellEditorHandler implements GraphPlugin {
       textarea.style.outline = 'none';
       textarea.style.color = color;
 
+      // Frank Modification
+      // Show focus textarea blinking effect
+      textarea.style.padding = '0.1px';
+
       let dir = (this.textDirection =
         state.style.textDirection ?? DEFAULT_TEXT_DIRECTION);
 
@@ -802,7 +809,8 @@ class CellEditorHandler implements GraphPlugin {
       if (
         this.autoSize &&
         // @ts-ignore
-        (this.graph.model.isEdge(state.cell) || state.style.overflow !== 'fill')
+        // Frank Modification
+         (state.cell.isEdge() || state.style.overflow !== 'fill')
       ) {
         window.setTimeout(() => {
           this.resize();

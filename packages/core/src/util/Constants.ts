@@ -599,6 +599,8 @@ export const enum EDGESTYLE {
   ORTHOGONAL = 'orthogonalEdgeStyle',
   SEGMENT = 'segmentEdgeStyle',
   MANHATTAN = 'manhattanEdgeStyle',
+  // Frank Modification
+  CUSTOM_MM = 'customMMEdgeStyle',
 }
 
 /**

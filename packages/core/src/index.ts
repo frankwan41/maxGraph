@@ -87,6 +87,8 @@ export { default as SelectionCellsHandler } from './view/handler/SelectionCellsH
 export { default as TooltipHandler } from './view/handler/TooltipHandler';
 export { default as VertexHandler } from './view/handler/VertexHandler';
 
+// Frank Modification
+export { default as GoalModelLayout } from './view/layout/GoalModelLayout';
 export { default as CircleLayout } from './view/layout/CircleLayout';
 export { default as CompactTreeLayout } from './view/layout/CompactTreeLayout';
 export { default as CompositeLayout } from './view/layout/CompositeLayout';

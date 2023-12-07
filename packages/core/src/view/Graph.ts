@@ -982,6 +982,8 @@ class Graph extends EventSource {
     ) {
       result = this.createElbowEdgeHandler(state);
     } else if (
+      // Frank Modification
+      edgeStyle == EdgeStyle.CustomMMConnector ||
       edgeStyle == EdgeStyle.SegmentConnector ||
       edgeStyle == EdgeStyle.OrthConnector
     ) {
@@ -1209,6 +1211,7 @@ class Graph extends EventSource {
 
     const tmp = this.view.getEdgeStyle(edge);
     return (
+      tmp === EdgeStyle.CustomMMConnector ||
       tmp === EdgeStyle.SegmentConnector ||
       tmp === EdgeStyle.ElbowConnector ||
       tmp === EdgeStyle.SideToSide ||

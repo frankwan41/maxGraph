@@ -1216,6 +1216,8 @@ export class GraphView extends EventSource {
    * @param source {@link CellState} that represents the source terminal.
    * @param target {@link CellState} that represents the target terminal.
    */
+
+  // Frank Modification (only works for MM, no adpation with edge style)
   updatePoints(
     edge: CellState,
     points: Point[],
@@ -1223,42 +1225,87 @@ export class GraphView extends EventSource {
     target: CellState | null
   ) {
     const pts = [];
-    pts.push((<Point[]>edge.absolutePoints)[0]);
-    const edgeStyle = this.getEdgeStyle(edge, points, source, target);
+    const absPoints = edge.absolutePoints;
 
-    if (edgeStyle && source) {
-      // target can be null
-      const src = this.getTerminalPort(edge, source, true);
-      const trg = target ? this.getTerminalPort(edge, target, false) : null;
-
-      // Uses the stencil bounds for routing and restores after routing
-      const srcBounds = this.updateBoundsFromStencil(src);
-      const trgBounds = this.updateBoundsFromStencil(trg);
-
-      edgeStyle(edge, src, trg, points, pts);
-
-      // Restores previous bounds
-      if (src && srcBounds) {
-        src.setRect(srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+    if (source && target) {
+      // console.log("source and target")
+      const targCent = new Point(this.getRoutingCenterX(target), this.getRoutingCenterY(target)) 
+      const sourceCent = new Point(this.getRoutingCenterX(source), this.getRoutingCenterY(source)) 
+      const sourcePerim = this.getPerimeterPoint(source, targCent, false);
+      const targPerim = this.getPerimeterPoint(target, sourceCent, false);
+      pts.push(sourcePerim, targPerim)
+    }else if (absPoints) {
+      // console.log(absPoints)
+      const endPoint = absPoints[absPoints.length - 1]
+      if (source && endPoint) {
+        // console.log("source point")
+        const perimeterPoint = this.getPerimeterPoint(source, endPoint, false);
+        pts.push(perimeterPoint)
+        pts.push(endPoint)
+      }
+      const startPoint = absPoints[0]
+       if (target && startPoint) {
+        // console.log("target point")
+        const perimeterPoint = this.getPerimeterPoint(target, startPoint, false);
+        pts.push(startPoint)
+        pts.push(perimeterPoint)
+      }
+      if (!source && !target){
+        // console.log("no source and target")
+        // console.log(startPoint, endPoint)
+        pts.push(startPoint)
+        pts.push(endPoint)
+        // console.log(pts)
       }
 
-      if (trg && trgBounds) {
-        trg.setRect(trgBounds.x, trgBounds.y, trgBounds.width, trgBounds.height);
-      }
-    } else if (points) {
-      for (let i = 0; i < points.length; i += 1) {
-        if (points[i]) {
-          const pt = clone(points[i]);
-          pts.push(this.transformControlPoint(edge, pt));
-        }
-      }
     }
-
-    const tmp = <Point[]>edge.absolutePoints;
-    pts.push(tmp[tmp.length - 1]);
-
     edge.absolutePoints = pts;
+    // console.log(pts);
   }
+
+  // updatePoints(
+  //   edge: CellState,
+  //   points: Point[],
+  //   source: CellState | null,
+  //   target: CellState | null
+  // ) {
+  //   const pts = [];
+  //   pts.push((<Point[]>edge.absolutePoints)[0]);
+  //   const edgeStyle = this.getEdgeStyle(edge, points, source, target);
+
+  //   if (edgeStyle && source) {
+  //     // target can be null
+  //     const src = this.getTerminalPort(edge, source, true);
+  //     const trg = target ? this.getTerminalPort(edge, target, false) : null;
+
+  //     // Uses the stencil bounds for routing and restores after routing
+  //     const srcBounds = this.updateBoundsFromStencil(src);
+  //     const trgBounds = this.updateBoundsFromStencil(trg);
+
+  //     edgeStyle(edge, src, trg, points, pts);
+
+  //     // Restores previous bounds
+  //     if (src && srcBounds) {
+  //       src.setRect(srcBounds.x, srcBounds.y, srcBounds.width, srcBounds.height);
+  //     }
+
+  //     if (trg && trgBounds) {
+  //       trg.setRect(trgBounds.x, trgBounds.y, trgBounds.width, trgBounds.height);
+  //     }
+  //   } else if (points) {
+  //     for (let i = 0; i < points.length; i += 1) {
+  //       if (points[i]) {
+  //         const pt = clone(points[i]);
+  //         pts.push(this.transformControlPoint(edge, pt));
+  //       }
+  //     }
+  //   }
+
+  //   const tmp = <Point[]>edge.absolutePoints;
+  //   pts.push(tmp[tmp.length - 1]);
+
+  //   edge.absolutePoints = pts;
+  // }
 
   /**
    * Transforms the given control point to an absolute point.

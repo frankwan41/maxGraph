@@ -59,6 +59,9 @@ class StyleRegistry {
   }
 }
 
+// Frank Modification
+// Register custom connector
+StyleRegistry.putValue(EDGESTYLE.CUSTOM_MM, EdgeStyle.CustomMMConnector);
 StyleRegistry.putValue(EDGESTYLE.ELBOW, EdgeStyle.ElbowConnector);
 StyleRegistry.putValue(EDGESTYLE.ENTITY_RELATION, EdgeStyle.EntityRelation);
 StyleRegistry.putValue(EDGESTYLE.LOOP, EdgeStyle.Loop);
