@@ -847,7 +847,13 @@ export type ShapeValue =
   | 'actor'
   | 'cloud'
   | 'triangle'
-  | 'hexagon';
+  | 'hexagon'
+  // Frank modification
+  | 'parallelogram'
+  | 'heart'
+  | 'negative'
+  | 'person'
+  | 'mm_cloud';
 
 export type CanvasState = {
   alpha: number;

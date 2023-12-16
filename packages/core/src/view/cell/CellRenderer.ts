@@ -33,6 +33,9 @@ import SwimlaneShape from '../geometry/node/SwimlaneShape';
 import ImageShape from '../geometry/node/ImageShape';
 import LabelShape from '../geometry/node/LabelShape';
 import TextShape from '../geometry/node/TextShape';
+// Frank modification 
+import { HeartShape, ParallelogramShape, PersonShape, NegativeShape, MMCloudShape } from '../geometry/node/MMShapes';
+
 import {
   ALIGN,
   DEFAULT_FONTFAMILY,
@@ -1533,6 +1536,12 @@ for (const [shapeName, shapeClass] of [
   [SHAPE.SWIMLANE, SwimlaneShape],
   [SHAPE.IMAGE, ImageShape],
   [SHAPE.LABEL, LabelShape],
+  // Frank modification
+  [SHAPE.PARALLELOGRAM, ParallelogramShape],
+  [SHAPE.HEART, HeartShape],
+  [SHAPE.PERSON, PersonShape],
+  [SHAPE.NEGATIVE, NegativeShape],
+  [SHAPE.MM_CLOUD, MMCloudShape],
 ]) {
   // @ts-ignore
   CellRenderer.registerShape(shapeName, shapeClass);

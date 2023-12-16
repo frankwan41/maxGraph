@@ -145,6 +145,8 @@ export { default as RectangleShape } from './view/geometry/node/RectangleShape';
 export { default as RhombusShape } from './view/geometry/node/RhombusShape';
 export { default as StencilShape } from './view/geometry/node/StencilShape';
 export { default as StencilShapeRegistry } from './view/geometry/node/StencilShapeRegistry';
+// Frank modification
+export { ParallelogramShape, HeartShape, PersonShape, NegativeShape, MMCloudShape } from './view/geometry/node/MMShapes';
 
 export * as constants from './util/Constants';
 export { default as Guide } from './view/other/Guide';

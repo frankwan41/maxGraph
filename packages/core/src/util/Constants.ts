@@ -710,4 +710,14 @@ export const enum SHAPE {
    * Default is hexagon.
    */
   HEXAGON = 'hexagon',
+
+  // Frank modification
+  /**
+   * Register shape name for motivational-modelling
+   */
+  PARALLELOGRAM = 'parallelogram',
+  HEART = 'heart',
+  NEGATIVE = 'negative',
+  PERSON = 'person',
+  MM_CLOUD = 'mm_cloud',
 }
